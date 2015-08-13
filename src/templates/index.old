@@ -1,0 +1,75 @@
+<html>
+    <head>
+        <title>Hack Fortress Registration</title>
+        <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
+    </head>
+    <body>
+        <div class="container">
+            <div class="navbar navbar-inverse">
+                <a class="navbar-brand" href="#">HackFortress Registration</a>
+            </div>
+            <div class="panel panel-default">
+            <div class="panel-heading"><h1>Register Full Team</h1></div>
+            <div class="panel-body">
+            <div id="team_div">
+                <form>
+                <b>Team Name:</b> <input id="team_name" type="text"></br>
+                <b>Contact</b> <input id="player_name1" type="text">
+                <b>Phone Number:</b> <input id="team_number1" type="tel">
+                <b>Email Address:</b> <input id="team_email1" type="email">
+                </br>
+                <b>Contact</b> <input id="player_name2" type="text">
+                <b>Phone Number:</b> <input id="team_number2" type="tel">
+                <b>Email Address:</b> <input id="team_email2" type="email"></br>
+                <b>Contact</b> <input id="player_name3" type="text">
+                <b>Phone Number:</b> <input id="team_number3" type="tel">
+                <b>Email Address:</b> <input id="team_email3" type="email"></br>
+                <b>Number of TF2 Players:</b> <input type="number" name="team_tf2" min="1" max="6"></br>
+                <b>Number of Hackers:</b> <input type="number" name="team_hack" min="1" max="4"></br>
+                <b>Time Slot:</b>
+                <select multiple>
+                    <option value="1000">10:00 AM</option>
+                    <option value="1100">11:00 AM</option>
+                    <option value="1200">12:00 PM</option>
+                    <option value="1300">01:00 PM</option>
+                </select><br/>
+                <input id="reg_team" type="button" value="Register Team"></br>
+                </form>
+            </div>
+            </div>
+            </div>
+
+            <div class="panel panel-default">
+            <div class="panel-heading"><h1>Register Single Player</h1></div>
+            <div class="panel-body">
+            <div id="player_div">
+                <form>
+                <b>Player Name:</b> <input id="player_name" type="text"></br>
+                <b>Phone Number:</b> <input id="player_number" type="tel"></br>
+                <b>Email Address:</b> <input id="player_email" type="email"></br>
+                <b>Player Type:</b>
+                    <select class="form-control" name="player_type">
+                        <option value="tf2">Team Fortress</option>
+                        <option value="hack">Hacker</option>
+                        <option value="either">Either</option>
+                    </select></br>
+                <b>Time Slot:</b>
+                <select multiple>
+                    <option value="1000">10:00 AM</option>
+                    <option value="1100">11:00 AM</option>
+                    <option value="1200">12:00 PM</option>
+                    <option value="1300">01:00 PM</option>
+                </select><br/>
+                <input id="reg_player" type="button" value="Register Player"></br>
+                </form>
+            </div>
+            </div>
+            </div>
+
+        </div>
+        <script src="/js/bootstrap.js"></script>
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/schedule.js"></script>
+
+    </body
+</html>

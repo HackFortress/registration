@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <title>Hack Fortress Registration</title>
+        <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
+    </head>
+    <body>
+        <div class="container">
+            <div class="navbar navbar-inverse">
+                <a class="navbar-brand" href="#">HackFortress Registration</a>
+            </div>
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#1000" data-toggle="tab"><b>1000</b></a></li>
+                <li><a href="#1100" data-toggle="tab"><b>1100</b></a></li>
+                <li><a href="#1200" data-toggle="tab"><b>1200</b></a></li>
+                <li><a href="#1300" data-toggle="tab"><b>1300</b></a></li>
+            </ul>
+            <div class="tab-content">
+        {% for hour in ["1000", "1100", "1200", "1300"] %}
+            {% if hour == "1000" %}
+            <div class="tab-pane active" id="{{hour}}">
+            {% else %}
+            <div class="tab-pane" id="{{hour}}">
+            {% endif %}
+            <div class="panel panel-default">
+            {% for color in ["Red", "Blue"] %}
+            <div class="panel-heading"><h1>{{color}} Team</h1></div>
+            <div class="panel-body">
+            <div id="team_div">
+                <b>Team Name:</b> <input id="team_{{color}}_{{hour}}" type="text"></br></br>
+                <b>Team Fortress Players</b></br>
+                {% for x in range(6) %}
+                <b>Handle:</b> <input id="tf2_handle_{{x}}_{{color}}_{{hour}}" type="text">
+                <b>Phone Number:</b> <input id="tf2_phone_{{x}}_{{color}}_{{hour}}" type="text">
+                <b>Email Address:</b> <input id="tf2_email_{{x}}_{{color}}_{{hour}}" type="text">
+                </br>
+                {% endfor %}
+                </br>
+                <b>Hackers</b></br>
+                {% for x in range(4) %}
+                <b>Handle:</b> <input id="hack_handle_{{x}}_{{color}}_{{hour}}" type="text">
+                <b>Phone Number:</b> <input id="hack_phone_{{x}}_{{color}}_{{hour}}" type="text">
+                <b>Email Address:</b> <input id="hack_email_{{x}}_{{color}}_{{hour}}" type="text">
+                </br>
+                {% endfor %}
+            </div>
+            </div>
+            {% endfor %}
+            </div>
+            </div>
+        {% endfor %}
+            </div>
+        </div>
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/bootstrap.js"></script>
+        <script src="/js/schedule.js"></script>
+
+    </body
+</html>
