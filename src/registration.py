@@ -2,6 +2,7 @@
 
 import json
 
+import database
 # import flask stuff
 from flask import Flask
 from flask import Response
@@ -17,6 +18,12 @@ def index():
     data["player_times"] = get_player_times
     return render_template("index.html")
 
+@app.route("/newteam")
+def newteam():
+    data = {}
+    data["player_times"] = get_player_times
+    return render_template("newteam.html")
+
 @app.route("/register_team", methods=["POST"])
 def register_team():
     print request.form
@@ -29,3 +36,4 @@ def get_player_times():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=4000, debug=True)
+    database_connection=database.Database('/tmp/hf.db')
