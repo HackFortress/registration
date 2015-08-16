@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 import sqlalchemy
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import IntegrityError
 
 Base = declarative_base()
 
@@ -16,16 +17,21 @@ class Database():
 		self.session = self.DBSession()
 
 	def add_record(self,record):
-		self.session.add(record)
-		self.session.commit()
+		try:
+			self.session.add(record)
+			self.session.commit()
+		except:
+			self.session.rollback()
+			return -1
 
 		return record.id
 
 class Team(Base):
 	 __tablename__ = 'team'
+	 __table_args__ = (UniqueConstraint("team_name",),)
 
 	 id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
-	 team_name = sqlalchemy.Column(sqlalchemy.String(250), nullable=False)
+	 team_name = sqlalchemy.Column(sqlalchemy.String(250), nullable=False, unique=True)
 
 	 def __init__(self, team_name):
 	 	self.team_name=team_name
@@ -40,9 +46,9 @@ class MemberType(Base):
 
 class TeamMember(Base):
 	__tablename__ = 'teammembers'
-
+	__table_args__ = (UniqueConstraint("user_name",),)
 	id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
-	user_name = sqlalchemy.Column(sqlalchemy.String(250), nullable=False)
+	user_name = sqlalchemy.Column(sqlalchemy.String(250), nullable=False, unique=True)
 	user_email = sqlalchemy.Column(sqlalchemy.String(250), nullable=False)
 	user_phone = sqlalchemy.Column(sqlalchemy.String(12), nullable=False)
 	team_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('team.id'))

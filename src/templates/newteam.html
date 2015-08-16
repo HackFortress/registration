@@ -12,63 +12,26 @@
             
             <div class="panel-heading"><h1>Add Team</h1></div>
             <div class="panel-body">
-            <div id="team_div">
-                <b>Team Name:</b> <input id="team_Red_1000" type="text"><br><br>
-                <b>Team Fortress Players</b><br>
-                
-                <b>Handle:</b> <input id="tf2_handle_0_Red_1000" type="text">
-                <b>Phone Number:</b> <input id="tf2_phone_0_Red_1000" type="text">
-                <b>Email Address:</b> <input id="tf2_email_0_Red_1000" type="text">
-                <br>
-                
-                <b>Handle:</b> <input id="tf2_handle_1_Red_1000" type="text">
-                <b>Phone Number:</b> <input id="tf2_phone_1_Red_1000" type="text">
-                <b>Email Address:</b> <input id="tf2_email_1_Red_1000" type="text">
-                <br>
-                
-                <b>Handle:</b> <input id="tf2_handle_2_Red_1000" type="text">
-                <b>Phone Number:</b> <input id="tf2_phone_2_Red_1000" type="text">
-                <b>Email Address:</b> <input id="tf2_email_2_Red_1000" type="text">
-                <br>
-                
-                <b>Handle:</b> <input id="tf2_handle_3_Red_1000" type="text">
-                <b>Phone Number:</b> <input id="tf2_phone_3_Red_1000" type="text">
-                <b>Email Address:</b> <input id="tf2_email_3_Red_1000" type="text">
-                <br>
-                
-                <b>Handle:</b> <input id="tf2_handle_4_Red_1000" type="text">
-                <b>Phone Number:</b> <input id="tf2_phone_4_Red_1000" type="text">
-                <b>Email Address:</b> <input id="tf2_email_4_Red_1000" type="text">
-                <br>
-                
-                <b>Handle:</b> <input id="tf2_handle_5_Red_1000" type="text">
-                <b>Phone Number:</b> <input id="tf2_phone_5_Red_1000" type="text">
-                <b>Email Address:</b> <input id="tf2_email_5_Red_1000" type="text">
-                <br>
-                
-                <br>
-                <b>Hackers</b><br>
-                
-                <b>Handle:</b> <input id="hack_handle_0_Red_1000" type="text">
-                <b>Phone Number:</b> <input id="hack_phone_0_Red_1000" type="text">
-                <b>Email Address:</b> <input id="hack_email_0_Red_1000" type="text">
-                <br>
-                
-                <b>Handle:</b> <input id="hack_handle_1_Red_1000" type="text">
-                <b>Phone Number:</b> <input id="hack_phone_1_Red_1000" type="text">
-                <b>Email Address:</b> <input id="hack_email_1_Red_1000" type="text">
-                <br>
-                
-                <b>Handle:</b> <input id="hack_handle_2_Red_1000" type="text">
-                <b>Phone Number:</b> <input id="hack_phone_2_Red_1000" type="text">
-                <b>Email Address:</b> <input id="hack_email_2_Red_1000" type="text">
-                <br>
-                
-                <b>Handle:</b> <input id="hack_handle_3_Red_1000" type="text">
-                <b>Phone Number:</b> <input id="hack_phone_3_Red_1000" type="text">
-                <b>Email Address:</b> <input id="hack_email_3_Red_1000" type="text">
-                <br>
-                
+           <div id="team_div">
+                 <form action="register_team" method="post">
+                    <b>Team Name:</b> <input name='team-name' id="team" type="text"></br></br>
+                    <b>Team Fortress Players</b></br>
+                    {% for x in range(6) %}
+                        <b>Handle:</b> <input name="tf2_handle_{{x}}" type="text">
+                        <b>Phone Number:</b> <input name="tf2_phone_{{x}}" type="text">
+                        <b>Email Address:</b> <input name="tf2_email_{{x}}" type="text">
+                        </br>
+                    {% endfor %}
+                    </br>
+                    <b>Hackers</b></br>
+                    {% for x in range(4) %}
+                        <b>Handle:</b> <input name="hack_handle_{{x}}" type="text">
+                        <b>Phone Number:</b> <input name="hack_phone_{{x}}" type="text">
+                        <b>Email Address:</b> <input name="hack_email_{{x}}" type="text">
+                        </br>
+                    {% endfor %}
+                    <input type="submit" value="Submit">
+                </form>
             </div>
             </div>
         </div>
