@@ -1,7 +1,5 @@
-console.log("hello")
-
-
 function check_form() {
+	var team={'tf2':{},'hack':{}}
 	$("#team_form :input").each(function( index ) {
 		// console.log($(this).context.id);
 		var name_regex= new RegExp(/[\S]{1,20}$/);
@@ -17,12 +15,14 @@ function check_form() {
 				var player_type=match[1]
 				var input_type=match[2]
 				var player_number=match[3]
-
+				if (team[player_type][player_number]==undefined) {
+					team[player_type][player_number]={}
+				}
 				switch(input_type) {
 					case 'handle':
 						if($(this).context.value.match(name_regex)) {
 							$(this).context.style.backgroundColor = "white";
-							console.log(input_type);
+							team[player_type][player_number]['handle']=$(this).context.value
 						}
 						else{
 							$(this).context.style.backgroundColor = "yellow";
@@ -32,7 +32,7 @@ function check_form() {
 					case 'phone':
 						if($(this).context.value.match(phone_regex)) {
 							$(this).context.style.backgroundColor = "white";
-							console.log(input_type);
+							team[player_type][player_number]['phone']=$(this).context.value
 						}
 						else{
 							$(this).context.style.backgroundColor = "yellow";
@@ -41,7 +41,7 @@ function check_form() {
 					case 'email':
 						if($(this).context.value.match(email_regex)) {
 							$(this).context.style.backgroundColor = "white";
-							console.log(input_type);
+							team[player_type][player_number]['email']=$(this).context.value
 						}
 						else{
 							$(this).context.style.backgroundColor = "yellow";
@@ -58,8 +58,22 @@ function check_form() {
 		else {
 			$("#team").css("background","white");
 		}
-		// console.log(player_type,input_type,player_number,team_name)	
+
+		// console.log(team)
+		// socket.emit('message', team);	
 		
 		
 	});	
+
+	if(team_name!='') {
+		jsontxt={}
+		jsontxt[team_name]=team
+		socket.emit('new_team', jsontxt);
+	}
+	else {
+		console.log("No team name set")
+	}
+	
 }
+
+var socket = io.connect('http://192.168.1.186:4000');

@@ -31,10 +31,38 @@ def newteam():
 
 @socketio.on('new_team')
 def handle_message(message):
-    print(message)
+	#submit form via websocket
+	team_data=message
+
+	for team_name in team_data:
+		team=database.Team(team_name)
+		team_id=database_connection.add_record(team)
+		for each_type in team_data[team_name]:
+			for each_member in team_data[team_name][each_type]:
+				member=team_data[team_name][each_type][each_member]
+				if member != {}:
+					try:
+						handle=member['handle']
+					except KeyError:
+						handle=''
+
+					try:
+						phone=member['email']
+					except KeyError:
+						phone=''
+
+					try:
+						email=member['email']
+					except KeyError:
+						email=''
+					team_member=database.TeamMember(handle,phone,email,team_id,each_type)
+					database_connection.add_record(team_member)
+					print team_member
+	#Todo Broadcast message a new team was created
 
 @app.route("/register_team", methods=["POST"])
 def register_team():
+	#Not needed unless we want to keet post around
 	player={'hack':{},'tf2':{}}
 	team_name=None
 	for each_form in request.form:
