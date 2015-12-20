@@ -1,5 +1,6 @@
 function check_form() {
 	var team={'tf2':{},'hack':{}}
+	error=0
 	$("#team_form :input").each(function( index ) {
 		// console.log($(this).context.id);
 		var name_regex= new RegExp(/[\S]{1,20}$/);
@@ -20,31 +21,34 @@ function check_form() {
 				}
 				switch(input_type) {
 					case 'handle':
-						if($(this).context.value.match(name_regex)) {
+						if($(this).context.value.match(name_regex) || $(this).context.value == '') {
 							$(this).context.style.backgroundColor = "white";
 							team[player_type][player_number]['handle']=$(this).context.value
 						}
 						else{
 							$(this).context.style.backgroundColor = "yellow";
+							error=1
 						}
 						
 						break;
 					case 'phone':
-						if($(this).context.value.match(phone_regex)) {
+						if($(this).context.value.match(phone_regex) || $(this).context.value == '') {
 							$(this).context.style.backgroundColor = "white";
 							team[player_type][player_number]['phone']=$(this).context.value
 						}
 						else{
 							$(this).context.style.backgroundColor = "yellow";
+							error=1
 						}
 						break;
 					case 'email':
-						if($(this).context.value.match(email_regex)) {
+						if($(this).context.value.match(email_regex) || $(this).context.value == '') {
 							$(this).context.style.backgroundColor = "white";
 							team[player_type][player_number]['email']=$(this).context.value
 						}
 						else{
 							$(this).context.style.backgroundColor = "yellow";
+							error=1
 						}
 						break;
 					default:
@@ -64,16 +68,25 @@ function check_form() {
 		
 		
 	});	
-
-	if(team_name!='') {
-		jsontxt={}
-		jsontxt[team_name]=team
-		socket.emit('new_team', jsontxt);
+	if(team_name!='' && error==0) {
+		message={'name':team_name,'members':team}
+		$.ajax({
+		    type: "POST",
+		    url: "/register_team",
+		    // The key needs to match your method's input parameter (case-sensitive).
+		    data: JSON.stringify(message),
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "json",
+		    success: function(data){alert(data);},
+		    failure: function(errMsg) {
+		        alert(errMsg);
+		    }
+		});
 	}
 	else {
-		console.log("No team name set")
+		console.log("Form Error")
 	}
 	
 }
 
-var socket = io.connect('http://192.168.1.186:4000');
+// var socket = io.connect('http://192.168.1.186:4000');

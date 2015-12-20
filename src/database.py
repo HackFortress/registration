@@ -26,6 +26,11 @@ class Database():
 
 		return record.id
 
+	def search_team(self,team):
+		result=self.session.query(Team).filter_by(team_name=team).count()
+
+		return result
+
 class Team(Base):
 	 __tablename__ = 'team'
 	 __table_args__ = (UniqueConstraint("team_name",),)
@@ -65,16 +70,17 @@ class TeamMember(Base):
 
 if __name__ == '__main__':
 	database_connection=Database('/tmp/hf.db')
+	database_connection.search_team('TEAMNAME')
 
-	type_hacker=MemberType("Hacker")
-	database_connection.add_record(type_hacker)
+	# type_hacker=MemberType("Hacker")
+	# database_connection.add_record(type_hacker)
 
-	type_tf2=MemberType("Tf2")
-	database_connection.add_record(type_tf2)
+	# type_tf2=MemberType("Tf2")
+	# database_connection.add_record(type_tf2)
 
-	team1=Team('TEAMNAME')
-	team_id=database_connection.add_record(team1)
+	# team1=Team('TEAMNAME')
+	# team_id=database_connection.add_record(team1)
 
-	team_member1=TeamMember('Bob Smith','bob@bob.com','123-456-7890',team_id,1)
-	database_connection.add_record(team_member1)
+	# team_member1=TeamMember('Bob Smith','bob@bob.com','123-456-7890',team_id,1)
+	# database_connection.add_record(team_member1)
 
