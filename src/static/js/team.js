@@ -62,25 +62,38 @@ function check_form() {
 		else {
 			$("#team").css("background","white");
 		}
-
-		// console.log(team)
-		// socket.emit('message', team);	
 		
 		
 	});	
 	if(team_name!='' && error==0) {
 		message={'name':team_name,'members':team}
-		$.ajax({
-		    type: "POST",
-		    url: "/register_team",
-		    // The key needs to match your method's input parameter (case-sensitive).
+		var request = $.ajax({
+			type: "POST",
+			url: "/register_team",
 		    data: JSON.stringify(message),
 		    contentType: "application/json; charset=utf-8",
-		    dataType: "json",
-		    success: function(data){alert(data);},
-		    failure: function(errMsg) {
-		        alert(errMsg);
-		    }
+		    dataType: "json"
+		});
+
+		request.done(function( msg ) {
+			console.log(msg)
+			$().toastmessage('showToast', {
+			    text     : msg['message'],
+			    sticky   : true,
+			    position : 'middle-center',
+			    type     : 'success',
+			    close    : function () {window.location.reload(false);}
+			});
+		});
+		 
+		request.fail(function( msg ) {
+	        $().toastmessage('showToast', {
+			    text     : msg['responseJSON']['message'],
+			    sticky   : true,
+			    position : 'middle-center',
+			    type     : 'error',
+			    close    : function () {console.log("toast is closed ...");}
+			});
 		});
 	}
 	else {
@@ -88,5 +101,3 @@ function check_form() {
 	}
 	
 }
-
-// var socket = io.connect('http://192.168.1.186:4000');

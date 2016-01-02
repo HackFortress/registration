@@ -1,45 +1,49 @@
-<html><head>
+<html>
+    <head>
         <title>Hack Fortress Registration</title>
         <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
+        <link type="text/css" href="css/jquery.toastmessage.css" rel="stylesheet"/>
         <script type="text/javascript" src="/js/socket.io.min.js"></script>
         <script type="text/javascript" src="/js/team.js"></script>
+        <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="/js/jquery.toastmessage.js"></script>
     </head>
     <body>
         <div class="container">
-            <div class="navbar navbar-inverse">
-                <a class="navbar-brand" href="#">HackFortress Registration</a>
-            </div>
-            
-            <div class="panel panel-default">
-            
-            <div class="panel-heading"><h1>Add Team</h1></div>
-            <div class="panel-body">
-           <div id="team_div">
-                 <form id='team_form'>
-                    <b>Team Name:</b> <input name='team-name' id="team" type="text"></br></br>
-                    <b>Team Fortress Players</b></br>
-                    {% for x in range(6) %}
-                        <b>Handle:</b> <input id="tf2_handle_{{x}}" name="tf2_handle_{{x}}" type="text">
-                        <b>Phone Number:</b> <input id="tf2_phone_{{x}}" name="tf2_phone_{{x}}" type="text">
-                        <b>Email Address:</b> <input id="tf2_email_{{x}}" name="tf2_email_{{x}}" type="text">
-                        </br>
-                    {% endfor %}
-                    </br>
-                    <b>Hackers</b></br>
-                    {% for x in range(4) %}
-                        <b>Handle:</b> <input id="hack_handle_{{x}}" name="hack_handle_{{x}}" type="text">
-                        <b>Phone Number:</b> <input id="hack_phone_{{x}}" name="hack_phone_{{x}}" type="text">
-                        <b>Email Address:</b> <input id="hack_email_{{x}}" name="hack_email_{{x}}" type="text">
-                        </br>
-                    {% endfor %}
-                </form>
-                 <button onclick="check_form()">Save</button>
-            </div>
-            </div>
+        <div class="navbar navbar-inverse">
+            <a class="navbar-brand" href="#">HackFortress Registration</a>
         </div>
 
-        <script src="/js/jquery.min.js"></script>
+        <div class="panel panel-default">
+
+        <div class="panel-heading"><h1>Add Team</h1></div>
+        <div class="panel-body">
+        <div id="team_div">
+             <form id='team_form'>
+                <b>Team Name:</b> <input name='team-name' id="team" type="text"></br></br>
+                <b>Team Fortress Players</b></br>
+                {% for x in range(6) %}
+                    <b>Handle:</b> <input id="tf2_handle_{{x}}" name="tf2_handle_{{x}}" type="text">
+                    <b>Phone Number:</b> <input id="tf2_phone_{{x}}" name="tf2_phone_{{x}}" type="text">
+                    <b>Email Address:</b> <input id="tf2_email_{{x}}" name="tf2_email_{{x}}" type="text">
+                    </br>
+                {% endfor %}
+                </br>
+                <b>Hackers</b></br>
+                {% for x in range(4) %}
+                    <b>Handle:</b> <input id="hack_handle_{{x}}" name="hack_handle_{{x}}" type="text">
+                    <b>Phone Number:</b> <input id="hack_phone_{{x}}" name="hack_phone_{{x}}" type="text">
+                    <b>Email Address:</b> <input id="hack_email_{{x}}" name="hack_email_{{x}}" type="text">
+                    </br>
+                {% endfor %}
+            </form>
+             <button onclick="check_form()">Save</button>
+        </div>
+        </div>
+        </div>
+
         <script src="/js/bootstrap.js"></script>
         <script src="/js/schedule.js"></script>
 
-    </body></html>
+    </body>
+</html>
