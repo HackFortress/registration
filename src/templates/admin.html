@@ -1,0 +1,131 @@
+<html>
+    <head>
+        <title>Hack Fortress Registration</title>
+        <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
+        <link type="text/css" href="css/jquery.toastmessage.css" rel="stylesheet"/>
+        <script type="text/javascript" src="/js/socket.io.min.js"></script>
+        <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="/js/jquery.toastmessage.js"></script>
+
+    </head>
+    <body>
+        <div class="container">
+        <div class="navbar navbar-inverse">
+            <a class="navbar-brand" href="#">HackFortress Registration</a>
+        </div>
+
+        <div class="panel panel-default">
+
+        <div class="panel-heading"><h1>Add Team</h1></div>
+        <div class="panel-body">
+        <div id="team_div">
+             <form id='team_form'>
+                <b>Team Name:</b> 
+                <select id='teamSelect'>
+                {% for x in teamNames%}
+                	<option value="{{x}}">{{x}}</option>
+                {% endfor%}
+                </select>
+                </br></br>
+                <b>Team Fortress Players</b></br>
+                {% for x in range(6) %}
+                		<b>Handle:</b> <input id="tf2_handle_{{x}}" name="tf2_handle_{{x}}" type="text" value='{{tf2[x]["name"]}}'>
+                    	<b>Phone Number:</b> <input id="tf2_phone_{{x}}" name="tf2_phone_{{x}}" type="text" value='{{tf2[x]["phone"]}}'>
+                    	<b>Email Address:</b> <input id="tf2_email_{{x}}" name="tf2_email_{{x}}" type="text" value='{{tf2[x]["email"]}}'>
+                    	<input type='hidden' id="tf2_id_{{x}}" value='{{tf2[x]["id"]}}'>
+                    	</br>
+                {% endfor %}
+                </br>
+                <b>Hackers</b></br>
+                {% for x in range(4) %}
+                    <b>Handle:</b> <input id="hack_handle_{{x}}" name="hack_handle_{{x}}" type="text" value='{{hack[x]["name"]}}'>
+                    <b>Phone Number:</b> <input id="hack_phone_{{x}}" name="hack_phone_{{x}}" type="text" value='{{hack[x]["phone"]}}'>
+                    <b>Email Address:</b> <input id="hack_email_{{x}}" name="hack_email_{{x}}" type="text" value='{{hack[x]["email"]}}'>
+                    <input type='hidden' id="hack_id_{{x}}" value='{{hack[x]["id"]}}'>
+                    </br>
+                {% endfor %}
+            </form>
+             <button onclick="check_form()">Save</button>
+        </div>
+        </div>
+        </div>
+
+        <script src="/js/bootstrap.js"></script>
+        <script src="/js/schedule.js"></script>
+        <script type="text/javascript">
+			$("#teamSelect").change(function() {
+				teamName=$('#teamSelect').val()
+				message={'team':teamName}
+				var request = $.ajax({
+					type: "POST",
+					url: "/view_team",
+				    data: JSON.stringify(message),
+				    contentType: "application/json; charset=utf-8",
+				    dataType: "json"
+				});
+
+				request.done(function( msg ) {
+					for(hacker in msg['hack']) {
+						$('#hack_handle_'+hacker).val(msg['hack'][hacker]['name'])
+						$('#hack_phone_'+hacker).val(msg['hack'][hacker]['phone'])
+						$('#hack_email_'+hacker).val(msg['hack'][hacker]['email'])
+						$('#hack_id_'+hacker).val(msg['hack'][hacker]['id'])
+					}
+					for(player in msg['tf2']) {
+						$('#tf2_handle_'+player).val(msg['tf2'][player]['name'])
+						$('#tf2_phone_'+player).val(msg['tf2'][player]['phone'])
+						$('#tf2_email_'+player).val(msg['tf2'][player]['email'])
+						$('#tf2_id_'+player).val(msg['tf2'][player]['id'])
+					}
+				});
+				 
+				request.fail(function( msg ) {
+				    $().toastmessage('showToast', {
+					    text     : msg['responseJSON']['message'],
+					    sticky   : true,
+					    position : 'middle-center',
+					    type     : 'error',
+					    close    : function () {console.log("toast is closed ...");}
+					});
+				});
+			});
+			function check_form() {
+				tf2=[]
+				hack=[]
+				for(x=0;x<6;x++) {
+					if($('#tf2_handle_'+x).val()!='') {
+						player={
+							'id':$('#tf2_id_'+x).val(),
+							'handle':$('#tf2_handle_'+x).val(),
+							'phone':$('#tf2_phone_'+x).val(),
+							'email':$('#tf2_email_'+x).val()
+						}
+						tf2.push(player)
+					}
+					
+				}
+				for(x=0;x<4;x++) {
+					if($('#hack_handle_'+x).val()!='') {
+						player={
+							'id':$('#hack_id_'+x).val(),
+							'handle':$('#hack_handle_'+x).val(),
+							'phone':$('#hack_phone_'+x).val(),
+							'email':$('#hack_email_'+x).val()
+						}
+						hack.push(player)
+					}
+				}
+				teamName=$('#teamSelect').val()
+				message={'team':teamName,'tf2':tf2,'hack':hack}
+				var request = $.ajax({
+					type: "POST",
+					url: "/update_team",
+				    data: JSON.stringify(message),
+				    contentType: "application/json; charset=utf-8",
+				    dataType: "json"
+				});
+			}
+		</script>
+
+    </body>
+</html>

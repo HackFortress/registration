@@ -31,6 +31,47 @@ class Database():
 
 		return result
 
+	def list_teams(self):
+		result=self.session.query(Team)
+		teams=[]
+		for team in result:
+			teams.append(team.team_name)
+
+		return teams
+
+	def findTeamId(self,teamName):
+		try:
+			team_id=self.session.query(Team).filter_by(team_name=teamName)[0].id
+		except IndexError:
+			return -1
+		return team_id
+
+	def updateMember(self,userId,handle,phone,email):
+		self.session.query(TeamMember).filter_by(id=userId).update({'user_name':handle,'user_phone':phone,'user_email':email})
+		self.session.commit()
+	
+	def addTeamMember(self,teamName,handle,phone,email,playerType):
+		team_id=self.findTeamId(teamName)
+
+		teamMember=TeamMember(user_name=handle,user_phone=phone,
+			user_email=email,team_id=team_id,member_type=playerType)
+		self.add_record(teamMember)
+	
+	def team_members(self,team):
+		ret={'hack':[],'tf2':[]}
+
+		team_id=self.findTeamId(team)
+
+		members=self.session.query(TeamMember).filter_by(team_id=team_id)
+		if members is not None:
+			for eachMember in members:
+				if eachMember.member_type == 1:
+					ret['hack'].append({'name':eachMember.user_name,'email':eachMember.user_email,'phone':eachMember.user_phone,'teamid':eachMember.team_id,'membertype':eachMember.member_type,'id':eachMember.id})
+				else:
+					ret['tf2'].append({'name':eachMember.user_name,'email':eachMember.user_email,'phone':eachMember.user_phone,'teamid':eachMember.team_id,'membertype':eachMember.member_type,'id':eachMember.id})
+			return ret
+		else:
+			return -1
 class Team(Base):
 	 __tablename__ = 'team'
 	 __table_args__ = (UniqueConstraint("team_name",),)

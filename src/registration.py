@@ -11,20 +11,87 @@ from flask import Response
 from flask import request
 from flask import render_template
 from flask import make_response
+from flask.ext.basicauth import BasicAuth
 
 app = Flask(__name__, static_url_path='')
 
-@app.route("/")
-def index():
-	data = {}
-	data["player_times"] = get_player_times
-	return render_template("index.html")
+app.config['BASIC_AUTH_USERNAME'] = 'hfadmin'
+app.config['BASIC_AUTH_PASSWORD'] = 'hfadmin'
 
-@app.route("/newteam")
+basic_auth = BasicAuth(app)
+
+@app.route("/")
 def newteam():
 	data = {}
-	data["player_times"] = get_player_times
 	return render_template("newteam.html")
+
+@app.route("/admin")
+@basic_auth.required
+def admin():
+	tf2=[]
+	hack=[]
+
+	teamNames=database_connection.list_teams()
+	
+	if len(teamNames) > 0:
+		members=database_connection.team_members(teamNames[0])
+		if 'tf2' in members:
+			tf2=members['tf2']
+		if 'hack' in members:
+			hack=members['hack']
+	for x in range(len(tf2),6):
+		tf2.append({'name':'','email':'','phone':'','teamid':'','membertype':'','id':'-1'})
+	for x in range(len(hack),4):
+		hack.append({'name':'','email':'','phone':'','teamid':'','membertype':'','id':'-1'})
+
+	return render_template("admin.html",teamNames=teamNames,hack=hack,tf2=tf2)
+@app.route("/view_team", methods=["POST"])
+@basic_auth.required
+def view():
+	team=request.json['team']
+	members=None
+	hack=[]
+	tf2=[]
+
+	if team is not None:
+		members=database_connection.team_members(team)
+	else:
+		message="No team set"
+		return json.dumps({ "message": message, 'code': 102 }), 500
+	if members is not None:
+		if 'tf2' in members:
+			tf2=members['tf2']
+		if 'hack' in members:
+			hack=members['hack']
+		for x in range(len(tf2),6):
+			tf2.append({'name':'','email':'','phone':'','teamid':'','membertype':'','id':'-1'})
+		for x in range(len(hack),4):
+			hack.append({'name':'','email':'','phone':'','teamid':'','membertype':'','id':'-1'})
+
+		return json.dumps({'hack':hack,'tf2':tf2})
+	else:
+		message="No team members for team {0}".format(team)
+		return json.dumps({ "message": message, 'code': 103 }), 500
+
+@app.route("/update_team", methods=["POST"])
+@basic_auth.required
+def update():
+	if 'team' in request.json:
+		teamName=request.json['team']
+		if 'hack' in request.json:
+			for eachMember in request.json['hack']:
+				if int(eachMember['id']) >=0:
+					database_connection.updateMember(eachMember['id'],eachMember['handle'],eachMember['phone'],eachMember['email'])
+				else:
+					database_connection.addTeamMember(teamName,eachMember['handle'],eachMember['phone'],eachMember['email'],'hack')
+		if 'tf2' in request.json:
+			for eachMember in request.json['tf2']:
+				if int(eachMember['id']) >=0:
+					print eachMember
+					database_connection.updateMember(eachMember['id'],eachMember['handle'],eachMember['phone'],eachMember['email'])
+				else:
+					database_connection.addTeamMember(teamName,eachMember['handle'],eachMember['phone'],eachMember['email'],'tf2')
+	return json.dumps({'message':'Success'})
 
 @app.route("/register_team", methods=["POST"])
 def register_team():
@@ -49,7 +116,6 @@ def register_team():
 					else:
 						type_player=1
 					
-					print team_name,userData['handle'], userData['phone'], userData['email'],type_player
 					team_member=database.TeamMember(userData['handle'],userData['email'],userData['phone'],team_id,type_player)
 					database_connection.add_record(team_member)
 	except:
@@ -57,12 +123,6 @@ def register_team():
 
 	return json.dumps({"message": "Welcome to Hack Fortress!"}), 200
 
-def get_team_times():
-	return [10, 11, 12, 1]
-
-def get_player_times():
-	return [10, 11, 12, 1]
-
 if __name__ == "__main__":
 	database_connection=database.Database('hf.db')
-	app.run(host="0.0.0.0", port=4000, debug=True)	
+	app.run(host="0.0.0.0", port=4000)
