@@ -83,14 +83,14 @@ def update():
 				if int(eachMember['id']) >=0:
 					database_connection.updateMember(eachMember['id'],eachMember['handle'],eachMember['phone'],eachMember['email'])
 				else:
-					database_connection.addTeamMember(teamName,eachMember['handle'],eachMember['phone'],eachMember['email'],'hack')
+					database_connection.addTeamMember(teamName,eachMember['handle'],eachMember['phone'],eachMember['email'],1)
 		if 'tf2' in request.json:
 			for eachMember in request.json['tf2']:
 				if int(eachMember['id']) >=0:
 					print eachMember
 					database_connection.updateMember(eachMember['id'],eachMember['handle'],eachMember['phone'],eachMember['email'])
 				else:
-					database_connection.addTeamMember(teamName,eachMember['handle'],eachMember['phone'],eachMember['email'],'tf2')
+					database_connection.addTeamMember(teamName,eachMember['handle'],eachMember['phone'],eachMember['email'],2)
 	return json.dumps({'message':'Success'})
 
 @app.route("/register_team", methods=["POST"])
